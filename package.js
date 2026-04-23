@@ -1,2 +1,6 @@
-"main": "index.js",
-"start": "node index.js"
+{
+  "name": "festo-bot",
+  "main": "index.js",
+  "scripts": { "start": "node index.js" },
+  "dependencies": { "express": "^4.18.2" }
+}
