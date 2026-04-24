@@ -1,6 +1,7 @@
 const { default: makeWASocket, DisconnectReason, useMultiFileAuthState } = require('@whiskeysockets/baileys')
 const express = require('express')
 const pino = require('pino')
+const qrcode = require('qrcode-terminal')
 
 const app = express()
 const port = process.env.PORT || 3000
@@ -18,14 +19,19 @@ async function connectToWhatsApp() {
 
   const sock = makeWASocket({
     auth: state,
-    logger: pino({ level: 'silent' }),
-    printQRInTerminal: true
+    logger: pino({ level: 'silent' })
   })
 
   sock.ev.on('creds.update', saveCreds)
 
   sock.ev.on('connection.update', (update) => {
-    const { connection, lastDisconnect } = update
+    const { connection, lastDisconnect, qr } = update
+
+    if(qr) {
+      console.log('SCAN HII QR KWA WHATSAPP:')
+      qrcode.generate(qr, { small: true })
+    }
+
     if(connection === 'close') {
       const shouldReconnect = lastDisconnect.error?.output?.statusCode!== DisconnectReason.loggedOut
       console.log('Connection closed, reconnecting:', shouldReconnect)
