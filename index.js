@@ -50,7 +50,7 @@ async function connectToWhatsApp() {
       const text = msg.message.conversation || msg.message.extendedTextMessage?.text || ''
 
       if(text.toLowerCase() === 'menu') {
-        await sock.sendMessage(from, { text: `💅 *FESTO NAILS STUDIO* 💅\n\nKaribu mteja wetu!\n\n1️⃣ Bei za kucha\n2️⃣ Weka booking\n3️⃣ Saa za kazi\n4️⃣ Mahali tulipo\n\nJibu namba tu` })
+        await sock.sendMessage(from, { text: `💅 *FESTO NAILS STUDIO* 💅\n\nKaribu mteja wetu!\n\n1️⃣ Bei za kucha\n2️⃣ Weka booking\n3️⃣ Saa za kazi\n4️⃣ Mahali tulipo\n5️⃣ Njia za malipo\n\nJibu namba tu` })
       }
       else if(text === '1') {
         await sock.sendMessage(from, { text: `💰 *BEI ZETU*\n\nKuweka rangi: 15,000\nKuchora: 20,000-35,000\nGel: 25,000\n\nKaribu sana!` })
@@ -63,6 +63,9 @@ async function connectToWhatsApp() {
       }
       else if(text === '4') {
         await sock.sendMessage(from, { text: `📍 *MAHALI*\n\nDar es Salaam, Tanzania\nPiga: 0687 702 991 kwa maelekezo` })
+      }
+      else if(text === '5' || text.toLowerCase().includes('malipo') || text.toLowerCase().includes('lipa')) {
+        await sock.sendMessage(from, { text: `💳 *NJIA ZA MALIPO - FESTO NAILS* 💳\n\n*1️⃣ LIPA KWA TIGO PESA / YAS*\nLipa Namba: *45880089*\nJina: FELISIAN J BALAGULA\n\n*2️⃣ LIPA KWA AIRTEL MONEY*\nLipa Namba: *144794243*\nJina: FELISIAN J BALAGULA\n\n*3️⃣ TUMA KWA AIRTEL MONEY*\nJina: FELISIAN J BALAGULA\nNamba: 0687 702 991\n\n✅ Baada ya kulipa tuma screenshot ya muamala hapa\n📞 Au piga 0687 702 991 kuthibitisha\n\nAsante kwa kuchagua Festo Nails 💅` })
       }
     }
   })
