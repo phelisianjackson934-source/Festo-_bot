@@ -2,9 +2,10 @@ const { default: makeWASocket, DisconnectReason, useMultiFileAuthState } = requi
 const qrcode = require('qrcode-terminal');
 const fs = require('fs');
 
-// LAZIMISHA KUFUTA SESSION
+// Futa session ya zamani
 if (fs.existsSync('./auth_info_baileys')) {
     fs.rmSync('./auth_info_baileys', { recursive: true, force: true });
+    console.log('Session ya zamani imefutwa. Inatengeneza mpya...');
 }
 
 async function startBot() {
@@ -12,8 +13,7 @@ async function startBot() {
 
     const sock = makeWASocket({
         auth: state,
-        printQRInTerminal: true, // MUHIMU: Lazimisha QR
-        browser: ['NailsBot', 'Chrome', '1.0.0'] // MUHIMU: Epuka Pairing Code
+        browser: ['Festo Nails Bot', 'Chrome', '120.0.0'] // Hii inazima Pairing Code
     });
 
     sock.ev.on('connection.update', (update) => {
@@ -21,7 +21,7 @@ async function startBot() {
 
         if (qr) {
             console.log('====== SCAN HII QR KWA WHATSAPP ======');
-            qrcode.generate(qr, { small: true });
+            qrcode.generate(qr, { small: true }); // Tunachapisha wenyewe
             console.log('======================================');
         }
 
@@ -30,7 +30,7 @@ async function startBot() {
             console.log('Connection closed, reconnecting:', shouldReconnect);
             if (shouldReconnect) startBot();
         } else if (connection === 'open') {
-            console.log('BOT IMEUNGANISHWA NA WHATSAPP!');
+            console.log('BOT IMEUNGANISHWA NA WHATSAPP! ✅');
         }
     });
 
@@ -41,5 +41,5 @@ startBot();
 
 const express = require('express');
 const app = express();
-app.get('/', (req, res) => res.send('NailsBot Live'));
-app.listen(process.env.PORT || 10000, () => console.log('Server running'));
+app.get('/', (req, res) => res.send('Festo Nails Bot Live'));
+app.listen(process.env.PORT || 10000);
