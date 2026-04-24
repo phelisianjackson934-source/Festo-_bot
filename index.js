@@ -2,10 +2,9 @@ const { default: makeWASocket, DisconnectReason, useMultiFileAuthState } = requi
 const qrcode = require('qrcode-terminal');
 const fs = require('fs');
 
-// FUTA FOLDER YA ZAMANI KILA UKIWASHA
+// LAZIMISHA KUFUTA SESSION
 if (fs.existsSync('./auth_info_baileys')) {
     fs.rmSync('./auth_info_baileys', { recursive: true, force: true });
-    console.log('Session ya zamani imefutwa. Inatengeneza mpya...');
 }
 
 async function startBot() {
@@ -13,43 +12,34 @@ async function startBot() {
 
     const sock = makeWASocket({
         auth: state,
-        printQRInTerminal: false // Tunachapisha wenyewe
+        printQRInTerminal: true, // MUHIMU: Lazimisha QR
+        browser: ['NailsBot', 'Chrome', '1.0.0'] // MUHIMU: Epuka Pairing Code
     });
 
     sock.ev.on('connection.update', (update) => {
         const { connection, lastDisconnect, qr } = update;
 
         if (qr) {
-            console.log('SCAN HII QR KWA WHATSAPP:');
+            console.log('====== SCAN HII QR KWA WHATSAPP ======');
             qrcode.generate(qr, { small: true });
+            console.log('======================================');
         }
 
         if (connection === 'close') {
-            const shouldReconnect = lastDisconnect?.error?.output?.statusCode!== DisconnectReason.loggedOut;
+            const shouldReconnect = lastDisconnect?.error?.output?.statusCode !== DisconnectReason.loggedOut;
             console.log('Connection closed, reconnecting:', shouldReconnect);
-            if (shouldReconnect) {
-                startBot();
-            }
+            if (shouldReconnect) startBot();
         } else if (connection === 'open') {
             console.log('BOT IMEUNGANISHWA NA WHATSAPP!');
         }
     });
 
     sock.ev.on('creds.update', saveCreds);
-
-    // Test command
-    sock.ev.on('messages.upsert', async (m) => {
-        const msg = m.messages[0];
-        if (!msg.key.fromMe && msg.message?.conversation === 'ping') {
-            await sock.sendMessage(msg.key.remoteJid, { text: 'Pong! NailsBot iko Live 💅' });
-        }
-    });
 }
 
 startBot();
 
 const express = require('express');
 const app = express();
-const PORT = process.env.PORT || 10000;
-app.get('/', (req, res) => res.send('NailsBot iko Live'));
-app.listen(PORT, () => console.log(`Server running on ${PORT}`));
+app.get('/', (req, res) => res.send('NailsBot Live'));
+app.listen(process.env.PORT || 10000, () => console.log('Server running'));
